@@ -31,6 +31,7 @@ import android.widget.SearchView;
 
 import com.adonai.manman.adapters.LocalArchiveArrayAdapter;
 import com.adonai.manman.misc.AbstractNetworkAsyncLoader;
+import com.adonai.manman.misc.TLSSocketFactory;
 import com.adonai.manman.views.ProgressBarWrapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,6 +42,8 @@ import org.apache.commons.compress.utils.CountingInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -334,8 +337,11 @@ public class ManLocalArchiveFragment extends Fragment implements SharedPreferenc
 
             @Override
             protected Void doInBackground(String... params) {
+
+                OkHttpClient client;
                 try {
-                    OkHttpClient client = new OkHttpClient();
+                    //TODO: Update sslSocketFactory to a non deprecated version!
+                    client = new OkHttpClient.Builder().sslSocketFactory(new TLSSocketFactory()).build();
                     Request request = new Request.Builder().url(params[0]).build();
                     Response response = client.newCall(request).execute();
                     if (!response.isSuccessful()) {
@@ -358,6 +364,10 @@ public class ManLocalArchiveFragment extends Fragment implements SharedPreferenc
                     Log.e(Utils.MM_TAG, "Exception while downloading man pages archive", e);
                     possibleEncountered = e;
                     publishProgress(-1L);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
                 }
                 return null;
             }
