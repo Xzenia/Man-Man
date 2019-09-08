@@ -46,7 +46,6 @@ public class MainPagerActivity extends AppCompatActivity {
 
     private ViewPager mPager;
     private Toolbar mActionBar;
-    private DonateHelper mDonateHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +62,6 @@ public class MainPagerActivity extends AppCompatActivity {
         mPager.setAdapter(new ManFragmentPagerAdapter(getSupportFragmentManager()));
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mPager);
-
-        // setting up vending
-        mDonateHelper = new DonateHelper(this);
 
         // applying default tab
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -85,9 +81,6 @@ public class MainPagerActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.about_menu_item:
                 showAbout();
-                return true;
-            case R.id.donate_menu_item:
-                mDonateHelper.purchaseGift();
                 return true;
             case R.id.settings_menu_item:
                 startActivity(new Intent(this, PreferencesActivity.class));
@@ -172,17 +165,6 @@ public class MainPagerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Pass on the activity result to the helper for handling
-        if (!mDonateHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing...
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if(!LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(BACK_BUTTON_NOTIFY))) {
             super.onBackPressed();
@@ -192,6 +174,5 @@ public class MainPagerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mDonateHelper.handleActivityDestroy();
     }
 }
