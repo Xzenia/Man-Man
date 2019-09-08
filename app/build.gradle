@@ -19,8 +19,8 @@ android {
 
     defaultConfig {
         applicationId "com.adonai.manman"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 18
+        targetSdkVersion 26
         versionCode 171
         versionName "1.7.1"
 
