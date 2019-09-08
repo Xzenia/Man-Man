@@ -13,7 +13,7 @@
         android:id="@+id/popup_menu"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/abc_ic_menu_overflow_material"
+        android:src="@drawable/ic_action_overflow"
         android:scaleType="fitXY"
         android:contentDescription="@string/popup_menu"/>
 
